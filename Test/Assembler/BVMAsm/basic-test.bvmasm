@@ -1,0 +1,32 @@
+.PROC 2 0
+    PUSH_BLOCK
+        PUSH_SCOPE
+            PULL_TO 0 0
+            PULL_TO 1 1
+            ADD 0 1
+
+            PULL_TO 0 0
+            PULL_TO 1 1
+            SUB 0 1
+
+            PULL_TO 0 0
+            PULL_TO 1 1
+            MUL 0 1
+
+            PULL_TO 0 0
+            PULL_TO 1 1
+            DIV 0 1
+
+            PULL_TO 0 0
+            PULL_TO 1 1
+            MOD 0 1
+
+            PULL_TO 0 0
+            PULL_TO 1 1
+            EXP 0 1
+
+            CALL 0 ; print_n
+        POP_SCOPE
+    POP_BLOCK
+
+    HALT
