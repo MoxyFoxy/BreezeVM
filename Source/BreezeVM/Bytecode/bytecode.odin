@@ -84,8 +84,9 @@ Instruction :: enum u16 {
 
     // 64-bit multi-value
 
-    CALL_O,     // CALL <u64>[FUNC_OFFSET]. Calls a specific function from its function offset in the header. Will pass all prepared values.
-    CALL_DYN_O, // CALL_DYN <u64>[STACK_OFFSET]. Calls a specific function from a pointer or string type. Will pass all prepared values.
+    CALL_O,     // CALL <u64>[PROC_CODE]. Calls an intrinstic procedure from its procedure offset in the header. Will pass all prepared values.
+    CALL_PROC,  // CALL_PROC <u64>[PROC_OFFSET]. Calls a specific procedure from its procedure offset in the header. Will pass all prepared values.
+    CALL_DYN_O, // CALL_DYN <u64>[STACK_OFFSET]. Calls a specific procedure from a pointer or string type. Will pass all prepared values.
 
     _RESERVED_64_BIT_MULTI_VALUE_INSTRUCTIONS = 280,
 
@@ -126,6 +127,18 @@ Instruction :: enum u16 {
     _RESERVED_136_BIT_INSTRUCTIONS = 370,
 }
 
+// These are instructions that can be used in the
+// data section of the BVMAsm file.
+DataInstruction :: enum u8 {
+    INVALID, // Padding to make sure that `get_type` can return an invalid value.
+
+    IMPORT,        // IMPORT <str>[LOCATION]. Adds a BVMAsm file into the import queue.
+    IMPORT_SHARED, // IMPORT_SHARED <str>[LOCATION]. Adds shared library into the import queue.
+    STORE,         // STORE <u8>[TYPE] <val>[VALUE]. Stores a value in the header of type String, Integer, Unsigned Integer, Float, or Boolean.
+}
+
+// These are the possible types within
+// the BVM.
 Type :: enum u8 {
     INVALID,
 
@@ -134,19 +147,23 @@ Type :: enum u8 {
     Array,
     Byte_Object,
 
+    // Default: I64
     Integer,
         Int, I8, I16,   I32,   I64,   I128,
                  I16le, I32le, I64le, I128le,
                  I16be, I32be, I64be, I128be,
 
+    // Default: U64
     Unsigned_Integer,
         Uint, U8, U16,   U32,   U64,   U128,
                   U16le, U32le, U64le, U128le,
                   U16be, U32be, U64be, U128be,
 
+    // Default: F64
     Float,
         F32, F64,
 
+    // Default: Bool
     Boolean,
         Bool, B8, B16, B32, B64,
 }

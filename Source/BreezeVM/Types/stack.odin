@@ -1,7 +1,12 @@
 package Types
 
+import "breeze:Bytecode"
+
 Stack_Type :: struct {
-    len: int, // Length in bytes.
+    len: u64, // Length in bytes.
+    type: Bytecode.Type, // The type, mapped to an external
+                         // enum that flattens the child
+                         // and parent types.
 
     // The discriminated union of possible variant types.
     variant: union {
@@ -17,16 +22,20 @@ Stack_Type :: struct {
     }
 }
 
+Header_Type :: struct {
+    len: u64,
+    type: Bytecode.Type,
+    val_off: u64,
+}
+
 Pointer :: ^Stack_Type;
 
 Type :: distinct u8;
 
-String  :: distinct Byte_Object;
-Array   :: distinct Byte_Object;
+String :: distinct Byte_Object;
+Array  :: distinct Byte_Object;
 
-Byte_Object :: struct {
-    data: rawptr,
-}
+Byte_Object :: distinct rawptr;
 
 Integer :: union {
     int, i8, i16,   i32,   i64,   i128,
