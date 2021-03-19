@@ -55,6 +55,46 @@ peek :: proc (ctx: ^Lexer_Context, byte_offset : u64 = 0) -> rune {
     return char;
 }
 
+// Peeks and returns whether or not
+peek_for_section :: proc (ctx: ^Lexer_Context) -> (is_code: bool, ok: bool) {
+
+    eat_whitespace (ctx);
+    
+    // Shadow to make mutable.
+    ctx := ctx;
+
+    // Set up a 5-char buffer for checking
+    // a section. Since we know these have
+    // to be ASCII, we can safely use a
+    // non-rune buffer for the string.
+    str: [5] u8;
+
+    // Simple iterator.
+    str_off : u64 = 0;
+
+    // Iterate for as long as we haven't reached the end of the input and
+    // we haven't reached the end of the buffer.
+    for ctx.byte_off < cast (u64) len (ctx.input) && str_off < 5 {
+        char := ctx.input [ctx.byte_off + str_off];
+
+        str [str_off] = char;
+
+        str_off += 1;
+    }
+
+    // Transmute back to a string to check for the
+    // CODE section header.
+    is_code = transmute (string) str[:] == ".CODE";
+
+    return
+        is_code,
+
+        // If it's code, the check is the fastest
+        // since it'll have to check if it's the
+        // HEAD section otherwise.
+        is_code || transmute (string) str[:] == ".DATA";
+}
+
 // Gets the byte offset of the next space-like character.
 get_next_whitespace_byte_offset :: proc (ctx: ^Lexer_Context) -> u64 {
     offset : u64 = 0;

@@ -1,9 +1,9 @@
 package CodeOutput
 
-import Lexer "assembler:Lexer"
+import "assembler:Lexer"
 
-import Types    "breeze:Types"
-import Bytecode "breeze:Bytecode"
+import "breeze:Types"
+import "breeze:Bytecode"
 
 // Iterates on a line of BVM Assembly, writing it to the bytecode buffer.
 iterate :: proc (code_ctx: ^Code_Context, lex_ctx: ^Lexer.Lexer_Context) {

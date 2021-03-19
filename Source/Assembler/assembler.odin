@@ -1,40 +1,112 @@
 package Assembler
 
-import Lexer      "assembler:Lexer"
-import CodeOutput "assembler:CodeOutput"
+import "assembler:Lexer"
+import "assembler:CodeOutput"
+import "assembler:HeaderOutput"
+import "assembler:BinaryOutput"
 
-import OS   "core:os"
-import FMT  "core:fmt"
-import Time "core:time"
+import "breeze:Types"
+
+import OS      "core:os"
+import FMT     "core:fmt"
+import Time    "core:time"
+import Runtime "core:runtime"
 
 main :: proc () {
-    // TODO: Header information
 
-    // TODO: Code check
+    start := Time.now ();
+
+    // Initialize the contexts necessary.
+    code_ctx := CodeOutput  .initialize_code_context   ();
+    head_ctx := HeaderOutput.initialize_header_context ();
+
+    error := false;
 
     for file in OS.args[1:] {
         file_data, ok := OS.read_entire_file (file);
 
-        if (!ok) {
-            FMT.printf ("Error loading {0}.\n", file);
+        // Something went wrong when
+        // loading the file.
+        if !ok {
+            FMT.printf ("Error loading file \"{0}\".\n", file);
             continue;
         }
 
-        code_ctx := CodeOutput.initialize_code_context (len (file_data));
-        lex_ctx  := Lexer.initialize_lexer_context     (file, string (file_data));
+        // Lexer_Context is file-dependent, while Code_Context and Header_Context
+        // are not. Therefore, the others are initalized outside of the loop, but
+        // the Lexer_Context is initialized within.
+        lex_ctx := Lexer.initialize_lexer_context (file, string (file_data));
 
-        for (lex_ctx.byte_off < cast (u64) len (file_data)) {
-            CodeOutput.iterate (&code_ctx, &lex_ctx);
+        // State for checking
+        // whether to iterate
+        // as CodeOutput or
+        // HeaderOutput.
+        is_code := true;
+
+        // Iterate for as long as there is no more data in
+        // the file.
+        for lex_ctx.byte_off < cast (u64) len (file_data) {
+            Lexer.eat_whitespace (&lex_ctx);
+
+            // Check for possible DATA or CODE descriptor.
+            if (Lexer.peek (&lex_ctx) == '.') {
+                
+                // We want to peek, not eat, as the dot can also be the
+                // name of a procedure.
+                potentially_code, ok := Lexer.peek_for_section (&lex_ctx);
+
+                // Simple ternary. Only POTENTIALLY change
+                // state if a descriptor was actually found.
+                is_code = ok ? potentially_code : is_code;
+
+                // If a descriptor was found,
+                // destroy it as it's no longer
+                // needed.
+                if ok {
+                    Lexer.get_word       (&lex_ctx);
+                    Lexer.eat_whitespace (&lex_ctx);
+                }
+            }
+
+            if is_code {
+                CodeOutput.iterate (&code_ctx, &lex_ctx);
+            }
+
+            else {
+                HeaderOutput.iterate (&head_ctx, &lex_ctx);
+            }
+
+            // Failsafe in case another procedure
+            // doesn't eat whitespace.
+            Lexer.eat_whitespace (&lex_ctx);
         }
 
-        FMT.println ("Bytecode output:");
-        for i in 0..<code_ctx.off {
-            FMT.printf ("%2x ", code_ctx.buf[i]);
+        if len (lex_ctx.errors) > 0 {
+            for error in lex_ctx.errors {
+                FMT.println (error);
+            }
 
-            if ((i + 1) % 20 == 0 && i > 0) do FMT.println ();
+            error = true;
         }
-        FMT.println ();
+
+        // Update the offsets for any additional files.
+        head_ctx.last_off    = cast (u64) len (head_ctx.ro_data);
+        code_ctx.ro_last_off = cast (u64) len (head_ctx.ro_data);
     }
+
+    // Create the final binary buffer.
+    final_bin := BinaryOutput.make_final_binary (&head_ctx, &code_ctx);
+
+    if error do OS.exit (1);
+
+    end := Time.now ();
+
+    duration := Time.diff (start, end);
+
+    FMT.printf ("Completed binary in {0}ms.\n", Time.duration_seconds (duration) * 1e3);
+
+    // Write the binary out to a file.
+    OS.write_entire_file ("program.bvm", final_bin[:]);
 }
 
 test :: proc () {

@@ -1,6 +1,6 @@
 package Lexer
 
-import Bytecode "breeze:Bytecode"
+import "breeze:Bytecode"
 
 import FMT     "core:fmt"
 import Reflect "core:reflect"
@@ -16,13 +16,21 @@ get_instruction :: proc (ctx: ^Lexer_Context) -> Bytecode.Instruction {
 
     eat_whitespace (ctx);
 
-    char := eat (ctx);
+    char := peek (ctx);
 
     // Append until we hit whitespace.
     for ((!Strings.is_space (char) || len (Strings.to_string (builder)) == 0) && ctx.byte_off < u64 (len (ctx.input))) {
+
+        // This *specific* `eat`
+        // position is necessary
+        // or else the assembler
+        // won't get the final
+        // character.
+        char = eat (ctx);
+
         Strings.write_rune_builder (&builder, char);
 
-        char = eat (ctx);
+        char = peek (ctx);
     }
 
     // Make an uppercase version of the string
