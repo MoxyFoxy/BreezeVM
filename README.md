@@ -26,15 +26,15 @@ The BreezeVM depends on a very specific format that .bbc files have to conform t
 
 64 bits => Amount of procedure descriptors.
 64 bits => Length of the procedure descriptors in bytes.
-N bits => An array of procedure descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/interpreter.odin#L14]. Name must be followed by a null terminator.
+N bits => An array of procedure descriptors. Code [here](https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/interpreter.odin#L14). Name must be followed by a null terminator.
 
 64 bits => Amount of foreign imports.
 64 bits => Length of the foreign imports in bytes.
-N bits => An array of foreign import names. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25]. The names are null-terminated strings.
+N bits => An array of foreign import names. Code [here](https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25). The names are null-terminated strings.
 
 64 bits => Amount of data descriptors.
 64 bits => Length of the data descriptors in bytes.
-N bits => An array of data descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25].
+N bits => An array of data descriptors. Code [here](https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25).
 
 64 bits => Length of read-only data in bytes. Though this CAN be computed by subtracted an offset from the header length and a u64, this is kept here for consistency and ease of use.
 N bits => An array of bytes for the read-only data.
@@ -43,4 +43,4 @@ N bits => An array of bytes for the read-only data.
 N bits => The executable binary.
 
 ## Instructions
-This will be done after the instructions have been finalized, but the instructions with full documentation can be found (here!)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Bytecode/bytecode.odin].
+This will be done after the instructions have been finalized, but the instructions with full documentation can be found (here!)(https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Bytecode/bytecode.odin).
