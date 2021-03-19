@@ -22,25 +22,25 @@ BreezeVM is a virtual machine built for simplicity of targeting, specifically fo
 The BreezeVM depends on a very specific format that .bbc files have to conform to. The assembler conforms to this, but the format will be described here for any potential third-party applications. Note that this file format may be subject to change, especially after my graduation.
 
 
-1. 64 bits => Length of the entire header in bytes.
+64 bits => Length of the entire header in bytes.
 
-2. 64 bits => Amount of procedure descriptors.
-3. 64 bits => Length of the procedure descriptors in bytes.
-4. N bits => An array of procedure descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/interpreter.odin#L14]. Name must be followed by a null terminator.
+64 bits => Amount of procedure descriptors.
+64 bits => Length of the procedure descriptors in bytes.
+N bits => An array of procedure descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/interpreter.odin#L14]. Name must be followed by a null terminator.
 
-5. 64 bits => Amount of foreign imports.
-6. 64 bits => Length of the foreign imports in bytes.
-7. N bits => An array of foreign import names. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25]. The names are null-terminated strings.
+64 bits => Amount of foreign imports.
+64 bits => Length of the foreign imports in bytes.
+N bits => An array of foreign import names. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25]. The names are null-terminated strings.
 
-8. 64 bits => Amount of data descriptors.
-9. 64 bits => Length of the data descriptors in bytes.
-10. N bits => An array of data descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25].
+64 bits => Amount of data descriptors.
+64 bits => Length of the data descriptors in bytes.
+N bits => An array of data descriptors. Code (here)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25].
 
-11. 64 bits => Length of read-only data in bytes. Though this CAN be computed by subtracted an offset from the header length and a u64, this is kept here for consistency and ease of use.
-12. N bits => An array of bytes for the read-only data.
+64 bits => Length of read-only data in bytes. Though this CAN be computed by subtracted an offset from the header length and a u64, this is kept here for consistency and ease of use.
+N bits => An array of bytes for the read-only data.
 
-13. 64 bits => Length of the binary.
-14. N bits => The executable binary.
+64 bits => Length of the binary.
+N bits => The executable binary.
 
 ## Instructions
 This will be done after the instructions have been finalized, but the instructions with full documentation can be found (here!)[https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Bytecode/bytecode.odin].
