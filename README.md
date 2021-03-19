@@ -61,4 +61,4 @@ N bits => An array of bytes for the read-only data.
 N bits => The executable binary.
 
 ## Instructions
-This will be done after the instructions have been finalized, but the instructions with full documentation can be found (here!)(https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Bytecode/bytecode.odin).
+This will be done after the instructions have been finalized, but the instructions with full documentation can be found [here!](https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Bytecode/bytecode.odin).
