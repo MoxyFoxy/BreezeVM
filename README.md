@@ -30,7 +30,7 @@ N bits => An array of procedure descriptors. Code [here](https://github.com/F0x1
 
 64 bits => Amount of foreign imports.
 64 bits => Length of the foreign imports in bytes.
-N bits => An array of foreign import names. Code [here](https://github.com/F0x1fy/BreezeVM/blob/master/Source/BreezeVM/Types/stack.odin#L25). The names are null-terminated strings.
+N bits => An array of foreign import names. The names are null-terminated strings.
 
 64 bits => Amount of data descriptors.
 64 bits => Length of the data descriptors in bytes.
