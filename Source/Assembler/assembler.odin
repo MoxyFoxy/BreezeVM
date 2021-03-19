@@ -106,7 +106,7 @@ main :: proc () {
     FMT.printf ("Completed binary in {0}ms.\n", Time.duration_seconds (duration) * 1e3);
 
     // Write the binary out to a file.
-    OS.write_entire_file ("program.bvm", final_bin[:]);
+    OS.write_entire_file ("program.bbc", final_bin[:]);
 }
 
 test :: proc () {
