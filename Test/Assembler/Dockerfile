@@ -12,4 +12,5 @@ RUN mkdir /var/bvmasm
 
 CMD /usr/share/odin/odin build /var/bvm/Source/Assembler -collection:breeze=/var/bvm/Source/BreezeVM -collection:assembler=/var/bvm/Source/Assembler -out:/var/bvm/bin/bvmasm \
     && cd /var/bvmasm \
+    && rm -f *.bvm \
     && find /var/bvmasm -type f | xargs /var/bvm/bin/bvmasm

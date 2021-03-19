@@ -5,12 +5,14 @@ RUN apt-get install git -y
 RUN apt-get install llvm -y
 RUN apt-get install clang -y
 RUN git clone https://github.com/odin-lang/Odin.git /usr/share/odin
-RUN cd /usr/share/odin
+WORKDIR /usr/share/odin
 RUN ./build.sh
-RUN cd /usr/bin
-RUN ln -s /usr/bin /usr/share/odin/odin odin
-RUN mkdir /var/BreezeVM_Test
+RUN mkdir /var/bvm
+RUN mkdir /var/bvmasm
 
-ADD source /var/BreezeVM_Test
-
-CMD cd /var/BreezeVM_Test && odin run .
+CMD /usr/share/odin/odin build /var/bvm/Source/BreezeVM -collection:breeze=/var/bvm/Source/BreezeVM -collection:assembler=/var/bvm/Source/Assembler -out:/var/bvm/bin/bvm \
+    && /usr/share/odin/odin build /var/bvm/Source/Assembler -collection:breeze=/var/bvm/Source/BreezeVM -collection:assembler=/var/bvm/Source/Assembler -out:/var/bvm/bin/bvmasm \
+    && cd /var/bvmasm \
+    && rm -f *.bvm \
+    && find /var/bvmasm -type f | xargs /var/bvm/bin/bvmasm \
+    && /var/bvm/bin/bvm program.bvm
