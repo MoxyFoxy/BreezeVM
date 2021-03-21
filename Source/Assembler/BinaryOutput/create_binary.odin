@@ -174,6 +174,7 @@ make_final_binary :: proc (head_ctx: ^HeaderOutput.Header_Context, code_ctx: ^Co
         Runtime.mem_copy (&final_bin[final_bin_off], &procedures_buf[0], len (procedures_buf));
         final_bin_off += len (procedures_buf);
     }
+
     // Copy the amount of shared / dynamic imports.
     imports_shared_amt := len (head_ctx.imports_shared);
     Runtime.mem_copy (&final_bin[final_bin_off], &imports_shared_amt, size_of (u64));
@@ -189,6 +190,7 @@ make_final_binary :: proc (head_ctx: ^HeaderOutput.Header_Context, code_ctx: ^Co
         Runtime.mem_copy (&final_bin[final_bin_off], &imports_shared_buf[0], len (imports_shared_buf));
         final_bin_off += len (imports_shared_buf);
     }
+
     // Copy the amount of data descriptors.
     ro_data_amt := len (head_ctx.ro_data);
     Runtime.mem_copy (&final_bin[final_bin_off], &ro_data_amt, size_of (u64));
