@@ -33,9 +33,6 @@ Instruction :: enum u16 {
 
     HALT,       // HALT. Halts the entire program.
 
-    PUSH_PREPARE_BLOCK, // PUSH_PREPARE_BLOCK. Creates a new prepare block.
-    POP_PREPARE_BLOCK,  // POP_PREPARE_BLOCK. Deletes a prepare block, then proceeds to the parent.
-
     _RESERVED_NO_BIT_INSTRUCTIONS = 40,
 
     // No-bit multi-value
