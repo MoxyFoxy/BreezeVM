@@ -1,41 +1,56 @@
 .DATA
-IMPORT_SHARED "../../../lib/somelib"
-IMPORT_SHARED "../../../lib/somelib2"
-IMPORT_SHARED "../../../lib/somelib3"
-
-STORE String "This is a test."
-STORE Integer 64
+STORE Int 1
+STORE Int 9
 
 .CODE
-.PROC 2 0
+
+.MAIN 0 0
+PUSH_SCOPE
     PUSH_BLOCK
-        PUSH_SCOPE
-            PULL_TO 0 0
-            PULL_TO 1 1
-            ADD 0 1
+        PREPARE_CONST 1 ; Prepare the iteration count.
 
-            PULL_TO 0 0
-            PULL_TO 1 1
-            SUB 0 1
+        CALL_PROC FIBONACCI
 
-            PULL_TO 0 0
-            PULL_TO 1 1
-            MUL 0 1
+        CALL 0 ; Call `print_values` for the prepared values.
 
-            PULL_TO 0 0
-            PULL_TO 1 1
-            DIV 0 1
-
-            PULL_TO 0 0
-            PULL_TO 1 1
-            MOD 0 1
-
-            PULL_TO 0 0
-            PULL_TO 1 1
-            EXP 0 1
-
-            CALL 0 ; print_n
-        POP_SCOPE
+        HALT
     POP_BLOCK
+POP_SCOPE
 
-    HALT
+.FIBONACCI 1 1
+PUSH_SCOPE
+    PUSH_BLOCK
+        CONST_TO 0 0 ; Pull the argument to the stack, but don't delete.
+        CONST_TO 0 1 ; Pull the comparison constant to the stack.
+        GREATER  0 1 ; Check if the iteration is greater than 1.
+
+        ; Essentially an "if" block.
+        ; Empty out the prepared values
+        ; then get the current stack value
+        ; and bring it up.
+        JMPIF 14
+            DELETE
+            PREPARE 0
+            RETURN
+
+        DELETE
+
+        SUB 0 1     ; Prepare the n-1 for the first call.
+        CALL_PROC FIBONACCI
+        PULL_TO 0 1 ; Save the result
+
+        PREPARE 0 ; Preparing the KRABBY PATTY! Couldn't help myself.
+
+        SUB 0 1   ; Prepare the n-1 for the second call (to be n-2).
+        PREPARE 1 ; This is the second stage to get to n-2.
+        SUB_M     ; Subtract to get n-2
+        CALL_PROC FIBONACCI
+        PULL_TO 0 2 ; Save the result
+
+        DELETE
+
+        ADD 1 2 ; Add the results together.
+
+        RETURN
+    POP_BLOCK
+POP_SCOPE
