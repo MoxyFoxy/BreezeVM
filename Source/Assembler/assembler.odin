@@ -50,7 +50,7 @@ main :: proc () {
 
             // Check for possible DATA or CODE descriptor.
             if (Lexer.peek (&lex_ctx) == '.') {
-                
+
                 // We want to peek, not eat, as the dot can also be the
                 // name of a procedure.
                 potentially_code, ok := Lexer.peek_for_section (&lex_ctx);
@@ -65,6 +65,8 @@ main :: proc () {
                 if ok {
                     Lexer.get_word       (&lex_ctx);
                     Lexer.eat_whitespace (&lex_ctx);
+
+                    continue;
                 }
             }
 
@@ -79,6 +81,17 @@ main :: proc () {
             // Failsafe in case another procedure
             // doesn't eat whitespace.
             Lexer.eat_whitespace (&lex_ctx);
+        }
+
+        for proc_call in code_ctx.proc_calls {
+            for procedure, i in code_ctx.procs {
+                if proc_call.name == procedure.name {
+                    offset := u64 (i);
+
+                    // Do a mem_copy of the generic type onto the context bytecode buffer.
+                    Runtime.mem_copy (&code_ctx.buf [proc_call.byte_off], &offset, size_of (u64));
+                }
+            }
         }
 
         if len (lex_ctx.errors) > 0 {

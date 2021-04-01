@@ -38,14 +38,15 @@ Instruction :: enum u16 {
     // No-bit multi-value
 
     PULL,        // PULL. Pulls prepared values from the block onto the stack. This will always be appended to the stack.
+    DELETE,      // DELETE. Deletes all prepared values from the block.
     PULL_DELETE, // PULL_DELETE. Pulls prepared values from the block onto the stack, then deletes the prepared block. This will always be appended to the stack.
 
-    ADD_MULTI_O, // ADD_M. Adds multiple prepared values.
-    SUB_MULTI_O, // SUB_M. Subtracts multiple prepared values.
-    MUL_MULTI_O, // MUL_M. Multiplies multiple prepared values.
-    DIV_MULTI_O, // DIV_M. Divides multiple prepared values.
-    MOD_MULTI_O, // MOD_M. Performs a standard modulus on multiple prepared values.
-    EXP_MULTI_O, // EXP_M. Performs an exponential operation on multiple prepared values, where the first is the base.
+    ADD_MULTI_O, // ADD_M. Adds multiple prepared values. Does clear out the prepared values.
+    SUB_MULTI_O, // SUB_M. Subtracts multiple prepared values. Does clear out the prepared values.
+    MUL_MULTI_O, // MUL_M. Multiplies multiple prepared values. Does clear out the prepared values.
+    DIV_MULTI_O, // DIV_M. Divides multiple prepared values. Does clear out the prepared values.
+    MOD_MULTI_O, // MOD_M. Performs a standard modulus on multiple prepared values. Does clear out the prepared values.
+    EXP_MULTI_O, // EXP_M. Performs an exponential operation on multiple prepared values, where the first is the base. Does clear out the prepared values.
 
     _RESERVED_NO_BIT_MULTI_VALUE_INSTRUCTIONS = 80,
 
@@ -81,9 +82,9 @@ Instruction :: enum u16 {
 
     // 64-bit multi-value
 
-    CALL_O,     // CALL <u64>[PROC_CODE]. Calls an intrinstic procedure from its procedure offset in the header. Will pass all prepared values.
-    CALL_PROC,  // CALL_PROC <u64>[PROC_OFFSET]. Calls a specific procedure from its procedure offset in the header. Will pass all prepared values.
-    CALL_DYN_O, // CALL_DYN <u64>[STACK_OFFSET]. Calls a specific procedure from a pointer or string type. Will pass all prepared values.
+    CALL_O,      // CALL <u64>[PROC_CODE]. Calls an intrinstic procedure from its procedure offset. Will pass all prepared values. Though this does output, output is not guaranteed as not all procedures return values.
+    CALL_PROC_O, // CALL_PROC <u64>[PROC_OFFSET]. In code, this is CALL_PROC <str>[PROC_NAME], but it gets assembled into the former. Calls a specific procedure from its procedure offset in the header. Will pass all prepared values.
+    CALL_DYN_O,  // CALL_DYN <u64>[STACK_OFFSET]. Calls a specific procedure from a pointer or string type. Will pass all prepared values.
 
     _RESERVED_64_BIT_MULTI_VALUE_INSTRUCTIONS = 280,
 
@@ -144,17 +145,17 @@ Type :: enum u8 {
     Array,
     Byte_Object,
 
-    // Default: I64
-    Integer,
-        Int, I8, I16,   I32,   I64,   I128,
-                 I16le, I32le, I64le, I128le,
-                 I16be, I32be, I64be, I128be,
-
     // Default: U64
     Unsigned_Integer,
         Uint, U8, U16,   U32,   U64,   U128,
                   U16le, U32le, U64le, U128le,
                   U16be, U32be, U64be, U128be,
+
+    // Default: I64
+    Integer,
+        Int, I8, I16,   I32,   I64,   I128,
+                 I16le, I32le, I64le, I128le,
+                 I16be, I32be, I64be, I128be,
 
     // Default: F64
     Float,

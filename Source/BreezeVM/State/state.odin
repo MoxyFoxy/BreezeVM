@@ -4,18 +4,44 @@ import "breeze:State/HeaderParser"
 import "breeze:Bytecode"
 import "breeze:Types"
 
-STACK_SIZE :: 1024 /** 2048*/ / size_of (Types.Stack_Type); // 2 MB
+STACK_SIZE :: 1024 / size_of (Types.Stack_Type); // 1024 /** 2048*/ / size_of (Types.Stack_Type); // 2 MB
 
 Interpreter_State :: struct {
-    procs   : map [string] Types.Procedure,
+    procs   : [] Types.Procedure,
     dyn_imps: [] string,
     data    : [] Types.Header_Type,
     ro      : [] byte,
 
     bytecode: [] byte,
     instruction_ptr: u64,
+    iterate: bool,
 
-    stack: [STACK_SIZE] byte,
+    scope: ^Scope,
+
+    exit: ^Exit_State,
+
+    stack: [STACK_SIZE] Types.Stack_Type,
+}
+
+Exit_State :: struct {
+    parent: ^Exit_State,
+    scope: ^Scope,
+    exit_off: u64, // Where to return to / exit to next
+}
+
+Scope :: struct {
+    parent: ^Scope,
+
+    off: u64, // Stack offset
+    largest_stack_pos: u64,
+
+    block: ^Block,
+}
+
+Block :: struct {
+    parent: ^Block,
+
+    prep_vals: [dynamic] Types.Stack_Type,
 }
 
 initialize :: proc (input: [] byte) -> Interpreter_State {
@@ -26,8 +52,10 @@ initialize :: proc (input: [] byte) -> Interpreter_State {
         imps,
         data,
         ro,
-        bytecode, 0,
+        bytecode, 0, true,
 
-        [STACK_SIZE] byte {},
+        nil, nil,
+
+        [STACK_SIZE] Types.Stack_Type {},
     };
 }

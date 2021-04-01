@@ -2,6 +2,8 @@ package HeaderParser
 
 import "breeze:Types"
 
+import FMT "core:fmt"
+
 Parser_Context :: struct {
     input: [] byte,
 
@@ -21,7 +23,7 @@ Parser_Context :: struct {
     bytecode: [] byte,
 }
 
-get_data :: proc (input: [] byte) -> (Parser_Context, map [string] Types.Procedure, [] string, [] Types.Header_Type, [] byte, [] byte) {
+get_data :: proc (input: [] byte) -> (Parser_Context, [] Types.Procedure, [] string, [] Types.Header_Type, [] byte, [] byte) {
     ctx := Parser_Context {
         input,
 

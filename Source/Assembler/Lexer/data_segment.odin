@@ -28,8 +28,6 @@ get_constant :: proc (ctx: ^Lexer_Context) -> Types.Stack_Type {
     type := get_type (ctx);
 
     if type == Bytecode.Type.INVALID {
-        append (&ctx.errors, FMT.aprintf ("Type at line {0}, offset {1}, is not a valid type.", ctx.line, ctx.line_off));
-
         return Types.Stack_Type{};
     }
 
@@ -45,22 +43,7 @@ get_constant :: proc (ctx: ^Lexer_Context) -> Types.Stack_Type {
                 transmute(Types.String) &(transmute ([] byte) raw_value)[0],
             };
 
-        case Bytecode.Type.Integer:
-            value, ok := Strconv.parse_i64 (raw_value);
-
-            if !ok {
-                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
-
-                return Types.Stack_Type{};
-            }
-
-            return Types.Stack_Type {
-                cast (u64) size_of (int),
-                Bytecode.Type.Integer,
-                cast (Types.Integer) value,
-            };
-
-        case Bytecode.Type.Unsigned_Integer:
+        case Bytecode.Type.Uint:
             value, ok := Strconv.parse_u64 (raw_value);
 
             if !ok {
@@ -71,11 +54,161 @@ get_constant :: proc (ctx: ^Lexer_Context) -> Types.Stack_Type {
 
             return Types.Stack_Type {
                 cast (u64) size_of (uint),
-                Bytecode.Type.Unsigned_Integer,
-                cast (Types.Unsigned_Integer) value,
+                Bytecode.Type.Uint,
+                cast (Types.Unsigned_Integer) cast (uint) value,
             };
 
-        case Bytecode.Type.Float:
+        case Bytecode.Type.U8:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (u8),
+                Bytecode.Type.U8,
+                cast (Types.Unsigned_Integer) cast (u8) value,
+            };
+
+        case Bytecode.Type.U16:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (u16),
+                Bytecode.Type.U16,
+                cast (Types.Unsigned_Integer) cast (u16) value,
+            };
+
+        case Bytecode.Type.U32:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (u32),
+                Bytecode.Type.U32,
+                cast (Types.Unsigned_Integer) cast (u32) value,
+            };
+
+        case Bytecode.Type.U64:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (u64),
+                Bytecode.Type.U64,
+                cast (Types.Unsigned_Integer) cast (u64) value,
+            };
+
+        case Bytecode.Type.Int:
+            value, ok := Strconv.parse_i64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (int),
+                Bytecode.Type.Int,
+                cast (Types.Integer) cast (int) value,
+            };
+
+        case Bytecode.Type.I8:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (i8),
+                Bytecode.Type.I8,
+                cast (Types.Integer) cast (i8) value,
+            };
+
+        case Bytecode.Type.I16:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (i16),
+                Bytecode.Type.I16,
+                cast (Types.Integer) cast (i16) value,
+            };
+
+        case Bytecode.Type.I32:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (i32),
+                Bytecode.Type.I32,
+                cast (Types.Integer) cast (i32) value,
+            };
+
+        case Bytecode.Type.I64:
+            value, ok := Strconv.parse_u64 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (i64),
+                Bytecode.Type.I64,
+                cast (Types.Integer) cast (i64) value,
+            };
+
+        case Bytecode.Type.F32:
+            value, ok := Strconv.parse_f32 (raw_value);
+
+            if !ok {
+                append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value for type {2}.", ctx.line, ctx.line_off, type));
+
+                return Types.Stack_Type{};
+            }
+
+            return Types.Stack_Type {
+                cast (u64) size_of (f32),
+                Bytecode.Type.F32,
+                cast (Types.Float) cast (f32) value,
+            };
+
+        case Bytecode.Type.F64:
             value, ok := Strconv.parse_f64 (raw_value);
 
             if !ok {
@@ -86,8 +219,8 @@ get_constant :: proc (ctx: ^Lexer_Context) -> Types.Stack_Type {
 
             return Types.Stack_Type {
                 cast (u64) size_of (f64),
-                Bytecode.Type.Float,
-                cast (Types.Float) value,
+                Bytecode.Type.F64,
+                cast (Types.Float) cast (f64) value,
             };
 
         case Bytecode.Type.Boolean:

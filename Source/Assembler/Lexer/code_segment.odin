@@ -37,13 +37,13 @@ get_instruction :: proc (ctx: ^Lexer_Context) -> Bytecode.Instruction {
     instruction_str := Strings.to_upper (Strings.to_string (builder));
 
     // Check to see if it is a multi-instruction variant of a normal instruction.
-    if (instruction_str [len (instruction_str) - 2: len (instruction_str) - 1] == "_M") {
-        Strings.write_string (&builder, "_MULTI_O");
+    if (instruction_str [len (instruction_str) - 2: len (instruction_str)] == "_M") {
+        Strings.write_string (&builder, "ULTI_O");
 
         delete (instruction_str);
 
         // Make an uppercase version of the string
-        instruction_str := Strings.to_upper (Strings.to_string (builder));
+        instruction_str = Strings.to_upper (Strings.to_string (builder));
     }
 
     instruction, ok := Reflect.enum_from_name (Bytecode.Instruction, instruction_str);
@@ -83,11 +83,11 @@ get_value :: proc (ctx: ^Lexer_Context) -> u64 {
     // We first get the byte offset for a slice, then find the next whitespace
     // character, using its offset as the end position of the slice, then
     // we parse the u64 value.
-    value, ok := Strconv.parse_u64 (ctx.input [ctx.byte_off : ctx.byte_off + get_next_whitespace_byte_offset (ctx)]);
+    value, ok := Strconv.parse_i64 (ctx.input [ctx.byte_off : ctx.byte_off + get_next_whitespace_byte_offset (ctx)]);
 
     eat_non_whitespace (ctx);
 
-    if ok do return value;
+    if ok do return transmute (u64) value;
 
     // This is only ran if it does not early-exit.
     append (&ctx.errors, FMT.aprintf ("Value at line {0}, offset {1}, is not a valid value.", ctx.line, ctx.line_off));

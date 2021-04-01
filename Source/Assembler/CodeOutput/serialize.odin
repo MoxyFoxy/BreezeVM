@@ -5,6 +5,8 @@ import "assembler:Lexer"
 import "breeze:Types"
 import "breeze:Bytecode"
 
+import FMT "core:fmt"
+
 // Iterates on a line of BVM Assembly, writing it to the bytecode buffer.
 iterate :: proc (code_ctx: ^Code_Context, lex_ctx: ^Lexer.Lexer_Context) {
     Lexer.eat_whitespace (lex_ctx);
@@ -38,6 +40,14 @@ write_instruction :: proc (code_ctx: ^Code_Context, lex_ctx: ^Lexer.Lexer_Contex
     instruction := Lexer.get_instruction (lex_ctx);
 
     write_to_code_context (code_ctx, instruction);
+
+    if (instruction == Bytecode.Instruction.CALL_PROC_O) {
+        append (&code_ctx.proc_calls, Proc_Call {Lexer.get_word (lex_ctx), code_ctx.off});
+
+        write_to_code_context (code_ctx, u64 (0));
+
+        return;
+    }
 
     if (instruction < Bytecode.Instruction._RESERVED_NO_BIT_PREPARED_VALUE_INSTRUCTIONS) do return;
 

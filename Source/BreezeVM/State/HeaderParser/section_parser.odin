@@ -33,9 +33,9 @@ get_str :: proc (ctx: ^Parser_Context) -> string {
     return val;
 }
 
-// Gets all of the procedure descriptors as a map.
-get_proc_descs :: proc (ctx: ^Parser_Context) -> map [string] Types.Procedure {
-    proc_descs := make (map [string] Types.Procedure, ctx.proc_descs_amt);
+// Gets all of the procedure descriptors as an array.
+get_proc_descs :: proc (ctx: ^Parser_Context) -> [] Types.Procedure {
+    proc_descs := make ([] Types.Procedure, ctx.proc_descs_amt);
 
     for i in 0..<ctx.proc_descs_amt {
         loc  := get_len (ctx);
@@ -43,7 +43,7 @@ get_proc_descs :: proc (ctx: ^Parser_Context) -> map [string] Types.Procedure {
         args := get_len (ctx);
         rets := get_len (ctx);
 
-        proc_descs [name] = Types.Procedure {loc, name, args, rets};
+        proc_descs [i] = Types.Procedure {loc, name, args, rets};
     }
 
     return proc_descs;

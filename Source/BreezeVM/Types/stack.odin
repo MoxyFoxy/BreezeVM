@@ -3,29 +3,31 @@ package Types
 import "breeze:Bytecode"
 
 Stack_Type :: struct {
-    len: u64, // Length in bytes.
+    len: u64, // Length in bytes, or in the case of arrays, how many values there are.
     type: Bytecode.Type, // The type, mapped to an external
                          // enum that flattens the child
                          // and parent types.
 
     // The discriminated union of possible variant types.
-    variant: union {
-        Pointer,
-        Type,
-        String,
-        Array,
-        Byte_Object,
-        Integer,
-        Unsigned_Integer,
-        Float,
-        Boolean,
-    }
+    variant: Stack_Variant,
+}
+
+Stack_Variant :: union {
+    Pointer,
+    Type,
+    String,
+    Array,
+    Byte_Object,
+    Integer,
+    Unsigned_Integer,
+    Float,
+    Boolean,
 }
 
 Header_Type :: struct {
     len: u64,
-    type: Bytecode.Type,
     val_off: u64,
+    type: Bytecode.Type,
 }
 
 Pointer :: ^Stack_Type;
@@ -55,4 +57,8 @@ Float :: union {
 
 Boolean :: union {
     bool, b8, b16, b32, b64,
+}
+
+Operation_Type :: enum {
+    Unknown, Numeric, String, Array, Byte_Object,
 }
