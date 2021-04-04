@@ -3,8 +3,6 @@ package Operations
 import "breeze:Types"
 import "breeze:State"
 
-import "core:fmt"
-
 get_prep_vals :: #force_inline proc (state: ^State.Interpreter_State) -> [dynamic] Types.Stack_Type {
     return state.scope.block.prep_vals;
 }
