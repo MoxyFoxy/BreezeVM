@@ -2,8 +2,10 @@ package Operations
 
 import "breeze:Types"
 import "breeze:Bytecode"
+import "breeze:Interpreter/Converters/Numeric"
 
 import MEM "core:mem"
+import FMT "core:fmt"
 
 LESSER  :: 0;
 GREATER :: 1;
@@ -12,6 +14,26 @@ INVALID_COMPARISON :: -1;
 
 compare :: proc (value, other: Types.Stack_Type) -> i8 {
     using Bytecode.Type;
+
+    value := value;
+    other := other;
+
+    // If the values are numeric, be sure to convert them.
+    if (value.type > Unsigned_Integer && value.type < Boolean) &&
+       (other.type > Unsigned_Integer && other.type < Boolean) 
+    {
+        if value.type < other.type {
+            value.type = other.type;
+
+            value = Numeric.convert (value, other.type);
+        }
+
+        else if (value.type > other.type) {
+            other.type = value.type;
+
+            other = Numeric.convert (other, value.type);
+        }
+    }
 
     assert (value.type == other.type, "Incompatible types used.");
 
