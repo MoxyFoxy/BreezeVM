@@ -243,7 +243,7 @@ parse_unknown_value :: proc (ctx: ^Lexer_Context) -> string {
     eat_whitespace (ctx);
 
     if (peek (ctx) == '"') do return parse_string (ctx);
-    
+
     return get_word (ctx);
 }
 
