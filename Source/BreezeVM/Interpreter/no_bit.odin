@@ -5,7 +5,6 @@ import "breeze:Types"
 import "breeze:Interpreter/Operations"
 
 import OS "core:os"
-import FMT "core:fmt"
 
 exit :: proc (state: ^State.Interpreter_State) {
 
@@ -22,6 +21,10 @@ exit :: proc (state: ^State.Interpreter_State) {
         Operations.delete_scope (curr_scope);
         curr_scope = next_scope;
     }
+
+    state.scope = curr_scope;
+
+    state.iterate = false;
 }
 
 ret :: proc (state: ^State.Interpreter_State) {
@@ -30,16 +33,10 @@ ret :: proc (state: ^State.Interpreter_State) {
     // Get the current block, then
     // store the prepared values.
     block     := state.scope.block;
-    prep_vals := block.prep_vals;
+    prep_vals := make ([dynamic] Types.Stack_Type);
 
-    // Iterate until we reach the
-    // end, deleting them all!
-    for block != nil {
-        next_block := block.parent;
-        
-        Operations.delete_block (block);
-
-        block = next_block;
+    for val in block.prep_vals {
+        append (&prep_vals, val);
     }
 
     exit (state);
@@ -51,8 +48,6 @@ ret :: proc (state: ^State.Interpreter_State) {
     delete (block.prep_vals);
 
     block.prep_vals = prep_vals;
-
-    FMT.println ("Here");
 }
 
 push_scope :: proc (state: ^State.Interpreter_State) {
