@@ -2,8 +2,6 @@ package HeaderParser
 
 import "breeze:Types"
 
-import FMT "core:fmt"
-
 Parser_Context :: struct {
     input: [] byte,
 

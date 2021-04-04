@@ -4,7 +4,7 @@ import "breeze:State/HeaderParser"
 import "breeze:Bytecode"
 import "breeze:Types"
 
-STACK_SIZE :: 1024 / size_of (Types.Stack_Type); // 1024 /** 2048*/ / size_of (Types.Stack_Type); // 2 MB
+STACK_SIZE :: 2048 / size_of (Types.Stack_Type); // 2KB
 
 Interpreter_State :: struct {
     procs   : [] Types.Procedure,
