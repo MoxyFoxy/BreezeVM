@@ -9,8 +9,16 @@ Code_Context :: struct {
     ro_last_off: u64,
     buf: [dynamic] byte,
 
-    procs: [dynamic] Types.Procedure,
+    procs     : [dynamic] Types.Procedure,
     proc_calls: [dynamic] Proc_Call,
+
+    labels: [dynamic] Goto,
+    gotos : [dynamic] Goto,
+}
+
+Goto :: struct {
+    name: string,
+    byte_off: u64,
 }
 
 Proc_Call :: struct {
@@ -20,11 +28,13 @@ Proc_Call :: struct {
 
 // Initializes a default code context based on the given buffer input size.
 initialize_code_context :: proc () -> Code_Context {
-    buf   := make ([dynamic] byte           );
-    procs := make ([dynamic] Types.Procedure);
-    calls := make ([dynamic] Proc_Call);
+    buf    := make ([dynamic] byte);
+    procs  := make ([dynamic] Types.Procedure);
+    calls  := make ([dynamic] Proc_Call);
+    labels := make ([dynamic] Goto);
+    gotos  := make ([dynamic] Goto);
 
-    return Code_Context { 0, 0, buf, procs, calls, };
+    return Code_Context { 0, 0, buf, procs, calls, labels, gotos, };
 }
 
 // Writes any value to the code context's buffer.

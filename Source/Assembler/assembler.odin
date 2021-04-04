@@ -48,6 +48,16 @@ main :: proc () {
         for lex_ctx.byte_off < cast (u64) len (file_data) {
             Lexer.eat_whitespace (&lex_ctx);
 
+            if (Lexer.peek (&lex_ctx) == ':') {
+                Lexer.eat (&lex_ctx);
+
+                label := Lexer.get_word (&lex_ctx);
+
+                append (&code_ctx.labels, CodeOutput.Goto {label, code_ctx.off});
+
+                continue;
+            }
+
             // Check for possible DATA or CODE descriptor.
             if (Lexer.peek (&lex_ctx) == '.') {
 
@@ -90,6 +100,16 @@ main :: proc () {
 
                     // Do a mem_copy of the generic type onto the context bytecode buffer.
                     Runtime.mem_copy (&code_ctx.buf [proc_call.byte_off], &offset, size_of (u64));
+                }
+            }
+        }
+
+        for goto in code_ctx.gotos {
+            for label, i in code_ctx.labels {
+                if (goto.name == label.name) {
+                    offset := i64 (label.byte_off) - i64 (goto.byte_off) - size_of (u64);
+
+                    Runtime.mem_copy (&code_ctx.buf [goto.byte_off], &offset, size_of (u64));
                 }
             }
         }
