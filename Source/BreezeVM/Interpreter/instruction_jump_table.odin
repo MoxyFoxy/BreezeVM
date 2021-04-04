@@ -39,21 +39,27 @@ _64_BIT_INSTRUCTION_JUMP_TABLE := #partial [Bytecode.Instruction] (proc (state: 
     .JMP = jmp,
     .REF_O = ref_o,
 
+    .CALL_O = call_o,
     .CALL_PROC_O = call_proc_o,
 
     // 64-bit prepared instructions
+    .NOT = not,
     .JMPIF = jmpif,
 };
 
 _128_BIT_INSTRUCTION_JUMP_TABLE := #partial [Bytecode.Instruction] (proc (state: ^State.Interpreter_State, param1, param2: u64)) {
+    .COPY = copy,
     .CONST_TO = const_to,
     .PULL_TO = pull_to,
+    .ARG_TO = arg_to,
     .ADD_O = add_o,
     .SUB_O = sub_o,
     .MUL_O = mul_o,
     .DIV_O = div_o,
     .MOD_O = mod_o,
+    .EQUAL_O = equal_o,
     .GREATER_O = greater_o,
+    .LESSER_EQ_O = lesser_equal_o,
 };
 
 invalid :: proc (state: ^State.Interpreter_State) { assert (false, "An invalid instruction was reached."); }
