@@ -1,9 +1,11 @@
 image_name="bvm-test"
 bvm_root="../../"
-input="BVMAsm"
 
-run:
-	docker run -it -v "$(shell readlink -f $(bvm_root))":/var/bvm -v "$(shell readlink -f $(input))":/var/bvmasm breezevm/bvm
+fibonacci:
+	@docker run -it -v "$(shell readlink -f $(bvm_root))":/var/bvm -v "$(shell readlink -f "Fibonacci")":/var/bvmasm breezevm/bvm
+
+hello-world:
+	@docker run -it -v "$(shell readlink -f $(bvm_root))":/var/bvm -v "$(shell readlink -f "Hello-World")":/var/bvmasm breezevm/bvm
 
 build:
-	docker build -t breezevm/bvm .
+	@docker build -t breezevm/bvm .
