@@ -18,6 +18,9 @@ Instruction :: enum u16 {
     DATA, // Is not actually an instruction. Signifies that the data segment has begun.
     CODE, // Is not actually an instruction. Signifies that the code segment has begun.
 
+    GOTO,   // Isn't really an instruction, but converts to a JMP.
+    GOTOIF, // Isn't really an instruction, but converts to a JMPIF.
+
     _RESERVED_INVALID_INSTRUCTIONS = 15,
 
     // No-bit
@@ -72,6 +75,8 @@ Instruction :: enum u16 {
 
     // 64-bit prepared value
 
+    NOT, // NOT <u64>[PREPARE_OFFSET]. Inverts a boolean at specified location in the prepared values.
+
     JMPIF, // JMPIF <i64>[BYTE_OFFSET]. Jumps to a specific offset in the code IF all prepared conditions are true. If it not a boolean, it'll check to make sure it is not null. Note this IS signed.
 
     DECLARE_PREPARED, // DECLARE_PREPARED <u64>[STACK_OFFSET]. Declares a specific type on the stack, zeroing it out, using the first type found in the prepared values.
@@ -81,7 +86,6 @@ Instruction :: enum u16 {
     _RESERVED_64_BIT_PREPARED_VALUE_INSTRUCTIONS = 240,
 
     // 64-bit multi-value
-
     CALL_O,      // CALL <u64>[PROC_CODE]. Calls an intrinstic procedure from its procedure offset. Will pass all prepared values. Though this does output, output is not guaranteed as not all procedures return values.
     CALL_PROC_O, // CALL_PROC <u64>[PROC_OFFSET]. In code, this is CALL_PROC <str>[PROC_NAME], but it gets assembled into the former. Calls a specific procedure from its procedure offset in the header. Will pass all prepared values.
     CALL_DYN_O,  // CALL_DYN <u64>[STACK_OFFSET]. Calls a specific procedure from a pointer or string type. Will pass all prepared values.
@@ -96,8 +100,10 @@ Instruction :: enum u16 {
 
     // 128-bit
 
+    COPY,        // COPY <u64>[STACK_OFFSET] <u64>[STACK_OFFSET]. Copies first stack offset to second.
     CONST_TO, // CONST_TO <u64>[DATA_OFFSET] <u64>[STACK_OFFSET]. Pulls a data value based on its offset to the specified location on the stack.
     PULL_TO,  // PULL_TO <u64>[PREPARE_OFFSET] <u64>[STACK_OFFSET]. Pulls prepared value based on its offset onto the specified location on the stack.
+    ARG_TO,   // ARG_TO <u64>[ARG_OFFSET] <u64>[STACK_OFFSET]. Pulls an argument from the parent scope to the specified stack location.
 
     ADD_O, // ADD <u64>[STACK_OFFSET] <u64>[STACK_OFFSET]. Adds two values on the stack.
     SUB_O, // SUB <u64>[STACK_OFFSET] <u64>[STACK_OFFSET]. Subtracts two values on the stack.
