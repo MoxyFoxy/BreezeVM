@@ -7,7 +7,7 @@ import "breeze:Types"
 import "assembler:HeaderOutput"
 
 prepare_o :: proc (state: ^State.Interpreter_State, offset: u64) {
-    append (&state.scope.block.prep_vals, value_at (state, u64 (transmute (i64) offset + transmute (i64) state.scope.off)));
+    append (&state.scope.block.prep_vals, value_at (state, offset));
 }
 
 prepare_const_o :: proc (state: ^State.Interpreter_State, offset: u64) {
@@ -15,7 +15,8 @@ prepare_const_o :: proc (state: ^State.Interpreter_State, offset: u64) {
 }
 
 jmp :: proc (state: ^State.Interpreter_State, offset: u64) {
-    state.instruction_ptr = transmute (u64) (cast (i64) state.instruction_ptr + transmute (i64) offset);
+    state.instruction_ptr = transmute (u64) (cast (i64) state.instruction_ptr + transmute (i64) offset + size_of (Bytecode.Instruction) + size_of (u64));
+
     state.iterate = false;
 }
 
