@@ -33,6 +33,18 @@ unsigned_integer_to_i64 :: proc (value: Types.Stack_Type) -> Types.Stack_Type {
     value := value;
 
     #partial switch type in value.variant.(Unsigned_Integer) {
+        case uint:
+            value.variant = cast (Integer) (i64 (value.variant.(Unsigned_Integer).(uint)));
+
+        case u8:
+            value.variant = cast (Integer) (i64 (value.variant.(Unsigned_Integer).(u8)));
+
+        case u16:
+            value.variant = cast (Integer) (i64 (value.variant.(Unsigned_Integer).(u16)));
+
+        case u32:
+            value.variant = cast (Integer) (i64 (value.variant.(Unsigned_Integer).(u32)));
+
         case u64:
             value.variant = cast (Integer) (i64 (value.variant.(Unsigned_Integer).(u64)));
 
