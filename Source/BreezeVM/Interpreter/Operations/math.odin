@@ -5,17 +5,12 @@ import "breeze:Bytecode"
 import "breeze:Interpreter/Converters/Numeric"
 
 import "core:math"
-import FMT "core:fmt"
 
 add_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
     using Bytecode;
 
-    FMT.printf ("values: {0}\n", values);
-
     current_type := Type.INVALID;
     final := values [0];
-
-    FMT.printf ("final: {0}\n", final);
 
     for val in values [1:] {
         val := val;
@@ -31,8 +26,6 @@ add_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
 
             val = Numeric.convert (val, final.type);
         }
-
-        FMT.printf ("final.type: {0}\n", final.type);
 
         #partial switch final.type {
             case .Uint: final.variant = cast (Types.Stack_Variant) cast (Types.Unsigned_Integer) (final.variant.(Types.Unsigned_Integer).(uint) + val.variant.(Types.Unsigned_Integer).(uint));
@@ -72,7 +65,7 @@ sub_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
             final = Numeric.convert (final, val.type);
         }
 
-        else {
+        else if (final.type > val.type) {
             val.type = final.type;
 
             val = Numeric.convert (val, final.type);
@@ -116,7 +109,7 @@ mul_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
             final = Numeric.convert (final, val.type);
         }
 
-        else {
+        else if (final.type > val.type) {
             val.type = final.type;
 
             val = Numeric.convert (val, final.type);
@@ -160,7 +153,7 @@ div_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
             final = Numeric.convert (final, val.type);
         }
 
-        else {
+        else if (final.type > val.type) {
             val.type = final.type;
 
             val = Numeric.convert (val, final.type);
@@ -204,7 +197,7 @@ mod_numeric :: proc (values: [] Types.Stack_Type) -> Types.Stack_Type {
             final = Numeric.convert (final, val.type);
         }
 
-        else {
+        else if (final.type > val.type) {
             val.type = final.type;
 
             val = Numeric.convert (val, final.type);
