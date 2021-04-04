@@ -1,0 +1,10 @@
+.DATA
+STORE String "Hello, World!"
+
+.CODE
+PUSH_SCOPE
+    PUSH_BLOCK
+        PREPARE_CONST 0
+        CALL 0
+    POP_BLOCK
+POP_SCOPE
