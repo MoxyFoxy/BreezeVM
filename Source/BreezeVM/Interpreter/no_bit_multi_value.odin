@@ -6,12 +6,8 @@ import "breeze:Bytecode"
 import "breeze:Interpreter/Operations"
 import "breeze:Interpreter/Converters/Numeric"
 
-import FMT "core:fmt"
-
 pull :: proc (state: ^State.Interpreter_State) {
     off := state.scope.largest_stack_pos;
-
-    FMT.printf ("prep_vals: {0}\n", state.scope.block.prep_vals);
 
     for val, i in state.scope.block.prep_vals {
         set_value (state, u64 (i + int (off)), val);
@@ -29,24 +25,22 @@ pull_delete :: proc (state: ^State.Interpreter_State) {
 }
 
 // Not an instruction.
-get_operation_type :: proc (state: ^State.Interpreter_State) -> Types.Operation_Type {
-    prep_val_type := state.scope.block.prep_vals [0].type;
-
+get_operation_type :: proc (state: ^State.Interpreter_State, value: Types.Stack_Type) -> Types.Operation_Type {
     type := Types.Operation_Type.Unknown;
 
-    if (prep_val_type >= Bytecode.Type.Unsigned_Integer && prep_val_type <= Bytecode.Type.F64 || prep_val_type == Bytecode.Type.Pointer) {
+    if (value.type >= Bytecode.Type.Unsigned_Integer && value.type <= Bytecode.Type.F64 || value.type == Bytecode.Type.Pointer) {
         type = Types.Operation_Type.Numeric;
     }
 
-    else if (prep_val_type == Bytecode.Type.String) {
+    else if (value.type == Bytecode.Type.String) {
         type = Types.Operation_Type.String;
     }
 
-    else if (prep_val_type == Bytecode.Type.Array) {
+    else if (value.type == Bytecode.Type.Array) {
         type = Types.Operation_Type.Array;
     }
 
-    else if (prep_val_type == Bytecode.Type.Byte_Object) {
+    else if (value.type == Bytecode.Type.Byte_Object) {
         type = Types.Operation_Type.Byte_Object;
     }
 
@@ -56,16 +50,16 @@ get_operation_type :: proc (state: ^State.Interpreter_State) -> Types.Operation_
 }
 
 add_multi_o :: proc (state: ^State.Interpreter_State) {
-    op_type := get_operation_type (state);
+    op_type := get_operation_type (state, state.scope.block.prep_vals [0]);
 
     #partial switch op_type {
         case .Unknown:
             // This will never be reached.
             unreachable ();
         case .Numeric:
-            output := Operations.add_numeric (state.scope.block.prep_vals [:]);
+            value := Operations.add_numeric (state.scope.block.prep_vals [:]);
             clear (&state.scope.block.prep_vals);
-            append (&state.scope.block.prep_vals, output);
+            append (&state.scope.block.prep_vals, value);
 
         /*
         case .String:
@@ -79,16 +73,16 @@ add_multi_o :: proc (state: ^State.Interpreter_State) {
 }
 
 sub_multi_o :: proc (state: ^State.Interpreter_State) {
-    op_type := get_operation_type (state);
+    op_type := get_operation_type (state, state.scope.block.prep_vals [0]);
 
     #partial switch op_type {
         case .Unknown:
             // This will never be reached.
             unreachable ();
         case .Numeric:
+            value := Operations.sub_numeric (state.scope.block.prep_vals [:]);
             clear (&state.scope.block.prep_vals);
-
-            append (&state.scope.block.prep_vals, Operations.sub_numeric (state.scope.block.prep_vals [:]));
+            append (&state.scope.block.prep_vals, value);
 
         /*
         case .String:
@@ -102,16 +96,16 @@ sub_multi_o :: proc (state: ^State.Interpreter_State) {
 }
 
 mul_multi_o :: proc (state: ^State.Interpreter_State) {
-    op_type := get_operation_type (state);
+    op_type := get_operation_type (state, state.scope.block.prep_vals [0]);
 
     #partial switch op_type {
         case .Unknown:
             // This will never be reached.
             unreachable ();
         case .Numeric:
+            value := Operations.mul_numeric (state.scope.block.prep_vals [:]);
             clear (&state.scope.block.prep_vals);
-
-            append (&state.scope.block.prep_vals, Operations.mul_numeric (state.scope.block.prep_vals [:]));
+            append (&state.scope.block.prep_vals, value);
 
         /*
         case .String:
@@ -125,16 +119,16 @@ mul_multi_o :: proc (state: ^State.Interpreter_State) {
 }
 
 div_multi_o :: proc (state: ^State.Interpreter_State) {
-    op_type := get_operation_type (state);
+    op_type := get_operation_type (state, state.scope.block.prep_vals [0]);
 
     #partial switch op_type {
         case .Unknown:
             // This will never be reached.
             unreachable ();
         case .Numeric:
+            value := Operations.div_numeric (state.scope.block.prep_vals [:]);
             clear (&state.scope.block.prep_vals);
-
-            append (&state.scope.block.prep_vals, Operations.div_numeric (state.scope.block.prep_vals [:]));
+            append (&state.scope.block.prep_vals, value);
 
         /*
         case .String:
@@ -148,16 +142,16 @@ div_multi_o :: proc (state: ^State.Interpreter_State) {
 }
 
 mod_multi_o :: proc (state: ^State.Interpreter_State) {
-    op_type := get_operation_type (state);
+    op_type := get_operation_type (state, state.scope.block.prep_vals [0]);
 
     #partial switch op_type {
         case .Unknown:
             // This will never be reached.
             unreachable ();
         case .Numeric:
+            value := Operations.mod_numeric (state.scope.block.prep_vals [:]);
             clear (&state.scope.block.prep_vals);
-
-            append (&state.scope.block.prep_vals, Operations.mod_numeric (state.scope.block.prep_vals [:]));
+            append (&state.scope.block.prep_vals, value);
 
         /*
         case .String:
