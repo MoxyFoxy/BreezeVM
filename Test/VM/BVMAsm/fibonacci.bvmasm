@@ -1,0 +1,73 @@
+.DATA
+STORE Int 0 ; a
+STORE Int 1 ; b
+STORE Int 2 ; i
+STORE Int 9 ; Seed
+
+.CODE
+
+.MAIN 0 0
+PUSH_SCOPE
+    PUSH_BLOCK
+        PREPARE_CONST 3 ; Prepare the iteration count.
+
+        CALL_PROC FIBONACCI
+
+        CALL 0 ; Call `print_values` for the prepared values.
+
+        HALT
+    POP_BLOCK
+POP_SCOPE
+
+; Memory layout:
+;   - 0 is i
+;   - 1 is a
+;   - 2 is b
+;   - 3 is c
+;   - 4 is n
+;
+; Code uses https://www.geeksforgeeks.org/c-program-for-fibonacci-numbers/
+; (space optimized method 2) as reference.
+.FIBONACCI 1 1
+PUSH_SCOPE
+    PUSH_BLOCK
+        ARG_TO 0 4 ; n
+        CONST_TO 0 1 ; a
+
+        EQUAL 4 1
+        NOT 0
+
+        GOTOIF NOTEQUAL
+            PREPARE 1
+            RETURN
+
+        :NOTEQUAL
+        CONST_TO 2 0 ; i
+        CONST_TO 1 2 ; b
+
+        :FORLOOP
+        DELETE
+
+        ADD 1 2     ; a + b
+        PULL_TO 0 3 ; c = a + b
+        DELETE
+
+        COPY 2 1 ; a = b
+        COPY 3 2 ; b = c
+
+        PREPARE 0
+        PREPARE_CONST 1
+        ADD_M
+        PULL_TO 0 0
+        DELETE
+
+        LESSER_EQ 0 4
+
+        GOTOIF FORLOOP
+
+        DELETE
+        PREPARE 2
+
+        RETURN
+    POP_BLOCK
+POP_SCOPE
