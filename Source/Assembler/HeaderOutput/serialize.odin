@@ -7,7 +7,6 @@ import "breeze:Types"
 import "breeze:Bytecode"
 
 import Reflect "core:reflect"
-import FMT "core:fmt"
 
 iterate :: proc (head_ctx: ^Header_Context, lex_ctx: ^Lexer.Lexer_Context) {
     Lexer.eat_whitespace (lex_ctx);
