@@ -4,7 +4,7 @@ IMPORT_SHARED "../../../lib/somelib2"
 IMPORT_SHARED "../../../lib/somelib3"
 
 STORE String "This is a test."
-STORE Integer 64
+STORE Int 64
 
 .CODE
 .PROC 2 0
