@@ -7,10 +7,10 @@ The Breeze Virtual Machine (BreezeVM or BVM) is a process virtual machine for a 
 Due to a compiler bug in Odin that invalidated the previous project, this project was quickly designed and developed in a month to meet the capstone's due date. Due to this, tests are severely lacking, as well as the implemented instructions.
 
 ## User and System Administrator Guide
-To view BreezeVM's user guide, please click on this link to go to [BreezeVM User and System Administrator Guide](/guide)
+To view BreezeVM's user guide, please click on this link to go to [BreezeVM User and System Administrator Guide](guide).
 
 ## Design
-To view BreezeVM's design, please click on this link to go to [BreezeVM's Design](/design).
+To view BreezeVM's design, please click on this link to go to [BreezeVM's Design](design).
 
 # Other Projects I've Worked On
 | Name              | Description                                                                                                                                                                                                                                                        | Technologies                                   | GitHub                                                                         |
