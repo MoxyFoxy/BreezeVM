@@ -1,5 +1,5 @@
 vm:
-	odin build Source/BreezeVM -out=bin/bvm -collection:breeze=Source/BreezeVM
+	odin build Source/BreezeVM -out=bin/bvm -collection:breeze=Source/BreezeVM -collection:assembler=Source/Assembler
 
 assembler:
 	odin build Source/Assembler -out=bin/bvmasm -collection:breeze=Source/BreezeVM -collection:assembler=Source/Assembler
@@ -11,7 +11,8 @@ update-breeze:
 
 update-lib:
 ifeq "$(shell ls lib | wc -l)" "0"
-	cd bin; git clone https://github.com/grufwub/odin-flagparse.git
+	cd lib;
+	# This is where any git pulls for dependencies would be added. 
 else
 	# https://stackoverflow.com/a/2108296
 	for lib in lib/*/
@@ -22,5 +23,5 @@ else
 endif
 
 clean:
-	find bin/* -type f -not -name '.gitkeep' -delete
+	find bin/* -not -name '.gitkeep' -delete
 	@echo "Binary directory has been cleaned."
