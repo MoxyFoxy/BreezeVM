@@ -113,10 +113,10 @@ The VM currently has a hard-coded stack size of 2KB (42 values). In a full relea
 The VM can contain any number of constant, read-only data. These are accessible through data offsets using the `CONST`-related instructions.
 
 ### Prepared Values
-Instead of a set number of registers, BVM uses "prepared" values. The {`PREPARE`} instructions allow the program to push to the prepared values. Prepared values are used to pass values to some instructions and to procedures.
+Instead of a set number of registers, BVM uses "prepared" values. The `PREPARE` instructions allow the program to push to the prepared values. Prepared values are used to pass values to some instructions and to procedures.
 
 ### Intrinsic Procedures
-Intrinsic procedures are defined in the virtual machine and are accessible in BVMAsm through the {`CALL`} instruction, followed by the procedure used in the jump table. Currently, there is only one intrinsic procedure, which prints out prepared values to `stdout` and is used for both the Fibonacci test as well as the Hello World test.
+Intrinsic procedures are defined in the virtual machine and are accessible in BVMAsm through the `CALL` instruction, followed by the procedure used in the jump table. Currently, there is only one intrinsic procedure, which prints out prepared values to `stdout` and is used for both the Fibonacci test as well as the Hello World test.
 
 ### Scopes
 Scopes are self-isolated chunks of code. The only way scopes interact is through pulling arguments from the parent scope. A child scope cannot access the stack of a parent scope.
@@ -159,7 +159,7 @@ A Breeze Bytecode header is broken up into several parts, some of variable lengt
 * N bits => The executable binary.
 
 ### Breeze Bytecode
-Though there are many possible instructions, due to time constraints, only a few instructions are implemented, and fewer have been tested. Curly braces are meant to show the in-text usage of instructions. `<` and `>` are used to signify the types used in an instruction and `[` and `]` are used to name the parameters passed. Below are, at the time of writing, the valid instructions:
+Though there are many possible instructions, due to time constraints, only a few instructions are implemented, and fewer have been tested. `{` and `}` are used to show the in-text usage of instructions. `<` and `>` are used to signify the types used in an instruction and `[` and `]` are used to name the parameters passed. Below are, at the time of writing, the valid instructions:
 
 #### Constructs
 There are a few non-instruction tokens that can be used in Breeze Bytecode. These are:
@@ -262,7 +262,7 @@ These instructions take two 64-bit parameters.
 * LESSER_EQ_O {`LESSER_EQ <u64>[STACK_OFFSET] <u64>[STACK_OFFSET]`} (Checks to see if the first value is less than or equal to the second value)
 
 ## Examples
-These examples use a reproducable Docker environment for testing. To run an example, simply navigate to {`Test`} and choose which directory to test, then make sure to build the Docker environment with {`make build`, then in {`Test/Assembler`, run {`make run`} to run, and for {`Test/VM`, the options are {`make hello-world`} for Hello World and {`make fibonacci`} for the Fibonacci sequence.
+These examples use a reproducable Docker environment for testing. To run an example, simply navigate to `Test` and choose which directory to test, then make sure to build the Docker environment with `make build`, then in `Test/Assembler`, run `make run` to run, and for `Test/VM`, the options are `make hello-world` for Hello World and `make fibonacci` for the Fibonacci sequence.
 
 Here are two examples of Breeze working in its entirety with its current functionality:
 
