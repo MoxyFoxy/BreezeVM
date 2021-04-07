@@ -6,13 +6,16 @@ BreezeVM is a virtual machine built for simplicity of targeting, specifically fo
 * Has a type-agnostic stack.
 * Can declare types at runtime.
 * Dynamic amount of "registers" through prepared values.
+* Instrinsic procedures.
 
-#### Todo Features
-* Main VM.
-* VM instructions.
-* Intrinsic procedures.
+## Portfolio, Design, and User Guide
+Main portfolio for the project can be found [here](https://f0x1fy.github.io/BreezeVM/).
 
-#### Planned Features (after graduation)
+Design can be found [here](https://f0x1fy.github.io/BreezeVM/design).
+
+User guide can be found [here](https://f0x1fy.github.io/BreezeVM/guide).
+
+## Planned Features (after graduation)
 * Flags and full CLI.
 * Shared library imports.
 * Standardized interface for shared libraries.
