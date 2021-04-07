@@ -16,6 +16,8 @@ To download BreezeVM through `git`, make sure to have [git](https://git-scm.com/
 Please click [here](https://github.com/F0x1fy/BreezeVM/releases/download/capstone/BreezeVM-Source.zip) to download the ZIP file for the Senior Capstone release.
 
 ## How to Build BreezeVM
+This section assumes the user has at least basic understanding in using and navigating both Linux and the shell. If you do not wish to build BreezeVM, but just use it, please go to [Download Binaries](#download-binaries).
+
 Building BreezeVM requires a program that can operate on `Makefile`s, as well as the [Odin](http://odin-lang.org/) compiler. The recommended program is [make](https://www.gnu.org/software/make/) on Linux. Note that these make commands require Linux, though the commands within them (with the exclusion of "`find`") can be ran manually on Windows, given that the [Odin](http://odin-lang.org/) compiler is installed. [LLVM](https://llvm.org/) and [mingw-w64](http://mingw-w64.org/doku.php/download/linux) are also required for the linking stages when using make.
 
 There is a `Makefile` in the root directory of the project. All `make` commands must be ran in the root of the repository.
@@ -40,21 +42,50 @@ Binary directory has been cleaned.
 
 ```
 > make assembler
-odin build Source/Assembler -out=bin/bvmasm -collection:breeze=Source/BreezeVM -collection:assembler=Source/Assembler
+Compiling BVM Assembler for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Linux is complete.
 ```
 
-Then, a `bvmasm` binary file will be created in the `bin` directory.
+Then, a `bvmasm` binary file will be created in the `bin/Linux` directory.
 
-* To build the VM, run "`make vm`". The VM will then be created in the `bin` directory.<br />Output should look like:
+* To build the VM, run "`make vm`". The VM will then be created in the `bin/Linux` directory.
 
 ```
 > make vm
-odin build Source/BreezeVM -out=bin/bvm -collection:breeze=Source/BreezeVM -collection:assembler=Source/Assembler
+Compiling BVM for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM for Linux is complete.
 ```
 
 Then, a `bvm` binary file will be created in the `bin` directory.
 
-* To clean up the binary directory, run "`make clean`".<br />Output should look like:
+* To cross-compile the Assembler for Windows, run `make vm-windows`. The Assembler will then be created in the `bin/Windows` directory.
+
+```
+> Compiling BVM Assembler for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Windows is complete.
+```
+(The `Linking for cross compilation...` warning can be ignored. There is no way to subdue the warning)
+
+* To cross-compile the VM for Windows, run `make vm-windows`. The VM will then be created in the `bin/Windows` directory.
+
+```
+> make vm-windows
+Compiling BVM for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM for Windows is complete.
+```
+(The `Linking for cross compilation...` warning can be ignored. There is no way to subdue the warning)
+
+* To clean up the binary directory, run "`make clean`".
 ```
 > make clean
 find bin/* -not -name '.gitkeep' -delete
@@ -62,6 +93,64 @@ Binary directory has been cleaned.
 ```
 
 Then, the `bin` directory will be emptied except for the `.gitignore` file.
+
+* To build the Assembler and VM for Linux, run `make all-linux`. The Assembler and VM will then be created in the `bin/Linux` directory.
+
+```
+Compiling BVM for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM for Linux is complete.
+
+Compiling BVM Assembler for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Linux is complete.
+```
+
+* To cross-compile the Assembler and VM for Windows, run `make all-windows`. The Assembler and VM will then be created in the `bin/Windows` directory.
+
+```
+Compiling BVM for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM for Windows is complete.
+
+Compiling BVM Assembler for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Windows is complete.
+```
+(The `Linking for cross compilation...` warnings can be ignored. There is no way to subdue the warning)
+
+* To build the Assembler and VM for both Linux and Windows, run `make all`. The Assembler and VM will then be created in both the `bin/Linux` and `bin/Windows` directory.
+
+```
+Compiling BVM for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM for Linux is complete.
+
+Compiling BVM Assembler for Linux...
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Linux is complete.
+
+Compiling BVM for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM for Windows is complete.
+
+Compiling BVM Assembler for Windows...
+Linking for cross compilation for this platform is not yet supported (windows amd64)
+Linking to create binary...
+Cleaning directory...
+BVM Assembler for Windows is complete.
+```
+(The `Linking for cross compilation...` warnings can be ignored. There is no way to subdue the warning)
 
 ## How to Use BVMAsm
 In order to assemble a [BVMAsm](#what-is-breezevm) file, first create a file titled "`[name].bvmasm`" (where "`[name]`" can be any name wanted) with valid BVMAsm in it, then call the assembler (`bvmasm`) on the file(s). A `program.bbc` file will be created if there are no errors. Any errors will be printed out before the program halts.
