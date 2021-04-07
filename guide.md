@@ -16,7 +16,7 @@ To download BreezeVM through `git`, make sure to have [git](https://git-scm.com/
 Please click [here](https://github.com/F0x1fy/BreezeVM/releases/download/capstone/BreezeVM-Source.zip) to download the ZIP file for the Senior Capstone release.
 
 ## How to Build BreezeVM
-This section assumes the user has at least basic understanding in using and navigating both Linux and the shell. If you do not wish to build BreezeVM, but just use it, please go to [Download Binaries](#download-binaries).
+This section assumes the user has at least basic understanding in using and navigating both Linux and the shell. If you wish to use, but not build BreezeVM, please go to [Download Binaries](#download-binaries).
 
 Building BreezeVM requires a program that can operate on `Makefile`s, as well as the [Odin](http://odin-lang.org/) compiler. The recommended program is [make](https://www.gnu.org/software/make/) on Linux. Note that these make commands require Linux, though the commands within them (with the exclusion of "`find`") can be ran manually on Windows, given that the [Odin](http://odin-lang.org/) compiler is installed. [LLVM](https://llvm.org/) and [mingw-w64](http://mingw-w64.org/doku.php/download/linux) are also required for the linking stages when using make.
 
